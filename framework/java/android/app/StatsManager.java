@@ -25,6 +25,7 @@ import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.annotation.RequiresPermission;
 import android.annotation.SystemApi;
+import android.app.compat.gms.GmsCompat;
 import android.content.Context;
 import android.os.Binder;
 import android.os.Build;
@@ -165,6 +166,9 @@ public final class StatsManager {
      */
     @RequiresPermission(allOf = { DUMP, PACKAGE_USAGE_STATS })
     public void addConfig(long configKey, byte[] config) throws StatsUnavailableException {
+        if (GmsCompat.isEnabled()) {
+            return;
+        }
         synchronized (sLock) {
             try {
                 IStatsManagerService service = getIStatsManagerServiceLocked();
@@ -207,6 +211,9 @@ public final class StatsManager {
      */
     @RequiresPermission(allOf = { DUMP, PACKAGE_USAGE_STATS })
     public void removeConfig(long configKey) throws StatsUnavailableException {
+        if (GmsCompat.isEnabled()) {
+            return;
+        }
         synchronized (sLock) {
             try {
                 IStatsManagerService service = getIStatsManagerServiceLocked();
@@ -272,6 +279,9 @@ public final class StatsManager {
     public void setBroadcastSubscriber(
             PendingIntent pendingIntent, long configKey, long subscriberId)
             throws StatsUnavailableException {
+        if (GmsCompat.isEnabled()) {
+            return;
+        }
         synchronized (sLock) {
             try {
                 IStatsManagerService service = getIStatsManagerServiceLocked();
@@ -326,6 +336,9 @@ public final class StatsManager {
     @RequiresPermission(allOf = { DUMP, PACKAGE_USAGE_STATS })
     public void setFetchReportsOperation(PendingIntent pendingIntent, long configKey)
             throws StatsUnavailableException {
+        if (GmsCompat.isEnabled()) {
+            return;
+        }
         synchronized (sLock) {
             try {
                 IStatsManagerService service = getIStatsManagerServiceLocked();
@@ -363,6 +376,9 @@ public final class StatsManager {
     @RequiresPermission(allOf = { DUMP, PACKAGE_USAGE_STATS })
     public @NonNull long[] setActiveConfigsChangedOperation(@Nullable PendingIntent pendingIntent)
             throws StatsUnavailableException {
+        if (GmsCompat.isEnabled()) {
+            return new long[0];
+        }
         synchronized (sLock) {
             try {
                 IStatsManagerService service = getIStatsManagerServiceLocked();
@@ -411,6 +427,9 @@ public final class StatsManager {
             @NonNull String configPackage,
             @Nullable PendingIntent pendingIntent)
             throws StatsUnavailableException {
+        if (GmsCompat.isEnabled()) {
+            return new long[0];
+        }
         synchronized (sLock) {
             try {
                 IStatsManagerService service = getIStatsManagerServiceLocked();
@@ -471,6 +490,9 @@ public final class StatsManager {
             @NonNull @CallbackExecutor Executor executor,
             @NonNull OutcomeReceiver<StatsCursor, StatsQueryException> outcomeReceiver)
             throws StatsUnavailableException {
+        if (GmsCompat.isEnabled()) {
+            return;
+        }
         if(query.getSqlDialect() != StatsQuery.DIALECT_SQLITE) {
             executor.execute(() -> {
                 outcomeReceiver.onError(new StatsQueryException("Unsupported Sql Dialect"));
@@ -519,6 +541,9 @@ public final class StatsManager {
      */
     @RequiresPermission(allOf = { DUMP, PACKAGE_USAGE_STATS })
     public byte[] getReports(long configKey) throws StatsUnavailableException {
+        if (GmsCompat.isEnabled()) {
+            return new byte[0];
+        }
         synchronized (sLock) {
             try {
                 IStatsManagerService service = getIStatsManagerServiceLocked();
@@ -564,6 +589,9 @@ public final class StatsManager {
      */
     @RequiresPermission(allOf = { DUMP, PACKAGE_USAGE_STATS })
     public byte[] getStatsMetadata() throws StatsUnavailableException {
+        if (GmsCompat.isEnabled()) {
+            return new byte[0];
+        }
         synchronized (sLock) {
             try {
                 IStatsManagerService service = getIStatsManagerServiceLocked();
@@ -604,6 +632,9 @@ public final class StatsManager {
     @RequiresPermission(allOf = {DUMP, PACKAGE_USAGE_STATS})
     public long[] getRegisteredExperimentIds()
             throws StatsUnavailableException {
+        if (GmsCompat.isEnabled()) {
+            return new long[0];
+        }
         synchronized (sLock) {
             try {
                 IStatsManagerService service = getIStatsManagerServiceLocked();
@@ -640,6 +671,9 @@ public final class StatsManager {
     public void setPullAtomCallback(int atomTag, @Nullable PullAtomMetadata metadata,
             @NonNull @CallbackExecutor Executor executor,
             @NonNull StatsPullAtomCallback callback) {
+        if (GmsCompat.isEnabled()) {
+            return;
+        }
         long coolDownMillis =
                 metadata == null ? DEFAULT_COOL_DOWN_MILLIS : metadata.mCoolDownMillis;
         long timeoutMillis = metadata == null ? DEFAULT_TIMEOUT_MILLIS : metadata.mTimeoutMillis;
@@ -670,6 +704,9 @@ public final class StatsManager {
      */
     @RequiresPermission(android.Manifest.permission.REGISTER_STATS_PULL_ATOM)
     public void clearPullAtomCallback(int atomTag) {
+        if (GmsCompat.isEnabled()) {
+            return;
+        }
         synchronized (sLock) {
             try {
                 IStatsManagerService service = getIStatsManagerServiceLocked();
